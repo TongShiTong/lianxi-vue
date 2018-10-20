@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="./index.css">
+</head>
+<body>
+<div id="app">
+
+    <my-btn>我的按钮</my-btn>
+    <my-btn>你的按钮</my-btn>
+    <my-container></my-container>
+</div>
+</body>
+<script src="./vue.js"></script>
+<script>
+    // 声明一个组件
+    const myBtn = {
+        template: `<button class="my-btn"><i class="down"></i><slot></slot></button>`
+    }
+    const container = {
+        template: `
+        <h1>
+            我是container
+            <my-btn>我的按钮</my-btn>
+        </h1>
+        `,
+        // component: {
+        //     myBtn
+        // }
+    }
+    Vue.component ('my-container', container)
+    //全局注册组件
+    //都可以使
+    Vue.component ('my-btn', myBtn)
+    const app = new Vue ({
+        el: '#app',
+        //局部注册组件
+        //把下面的写到container中,此时能直接用my-btn,只能在container中用，如上
+        // component: {
+        //     myBtn
+        // }
+    })
+</script>
+</html>

@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+  <link rel="stylesheet" href="./index.css">
+</head>
+<body>
+<div id="app">
+
+  <my-btn text="点击"@click.native="handleClick"></my-btn>
+  <my-btn :text="btnText" @to-you="getChild"></my-btn>
+  <h2>父组件的值{{num1}}</h2>
+  <button @click='parentAdd'>+++++</button>
+  <my-component :my-num="num1"
+  @add-parent='addSelf'
+  @reduce-parent='reduceSelf'
+  ></my-component>
+</div>
+</body>
+<script src="https://unpkg.com/vue/dist/vue.js"></script>
+<script>
+  //1.父向子传值利用props
+//  2.子向父传值利用events($emit触发一个自定义事件)
+
+//  声明一个组件
+  const myBtn = {
+    template: `
+            <button class="my-btn" @click="toFather">{{text}}</button>
+        `,
+    //父向子传值
+    props: {
+      text: {
+        type: String
+      }
+    },
+    data() {
+      return {
+        child: '来自子组件的值'
+      }
+    },
+    methods: {
+      toFather() {
+        this.$emit('to-you',this.child)
+      }
+    }
+  }
+
+//  声明一个计数器组件
+  const myComponent = {
+    props: {
+      'my-num':{
+        type: Number
+      }
+    },
+    template: `
+      <div>
+        <button @click="reduce">-</button>
+        <h4>{{num}}</h4>
+        <button @click="add">+</button>
+      </div>
+    `,
+    data() {
+      return {
+        num: this.myNum
+      }
+    },
+    methods: {
+      reduce () {
+        this.$emit('reduce-parent')
+      },
+      add () {
+        this.$emit('add-parent')
+      }
+    },
+    watch: {
+      myNum(val) {
+          this.num = val
+      }
+    }
+  }
+
+Vue.component('my-btn', myBtn)
+
+  const app = new Vue({
+    components: {
+      myComponent
+    },
+    el:"#app",
+    data: {
+      btnText: '我的按钮',
+      num1: 10
+    },
+    methods: {
+      handleClick() {
+        this.btnText = '你的按钮'
+      },
+    //  接收子组件传过来的值
+      getChild(Child){
+        console.log(Child)
+      },
+      parentAdd() {
+        this.num1 ++
+      },
+      addSelf() {
+        this.num1 ++
+      },
+      reduceSelf() {
+        this.num1 --
+      }
+    }
+  })
+
+</script>
+</html>

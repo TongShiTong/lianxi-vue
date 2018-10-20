@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    
+</body>
+<script>
+    function getQuery() {
+        let searchObj = {}
+        // 切割字符串，从1开始
+        let queryString = location.search.substring(1)
+        console.log(queryString)
+
+        let queryArr = queryString.split('&')
+        console.log(queryArr)
+        // queryString = queryString.substring(1)
+        // console.log(queryString)
+        queryArr.forEach(item => {
+            let key = item.split('=')[0]
+            let value = item.split('=')[1]
+            searchObj[key] = value
+        })
+        return searchObj
+    }
+    let queryObj = getQuery()
+    console.log(queryObj)
+</script>
+</html>
